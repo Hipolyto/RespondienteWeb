@@ -1,0 +1,19 @@
+﻿<Properties StartupConfiguration="{CF48A581-0F3E-48F3-85A3-71051A5616BA}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="RespondienteWeb/Default.aspx.cs">
+    <Files>
+      <File FileName="RespondienteWeb/Default.aspx" Line="9" Column="65" />
+      <File FileName="RespondienteWeb/Default.aspx.cs" Line="58" Column="15" />
+      <File FileName="RespondienteWeb/Firebase/FirebaseDB.cs" Line="4" Column="31" />
+      <File FileName="RespondienteWeb/Firebase/FirebaseRequest.cs" Line="4" Column="31" />
+      <File FileName="RespondienteWeb/Firebase/FirebaseResponse.cs" Line="3" Column="1" />
+      <File FileName="RespondienteWeb/Firebase/UtilityHelper.cs" Line="7" Column="31" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.RespondienteWeb PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
