@@ -1,33 +1,81 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace FirebaseNet.Database
 {
     /// <summary>
-    /// Firebase db.
+    /// Firebase manager.
     /// </summary>
     public class FirebaseManager
     {
         public static void SendNotification()
         {
+            var firebaseDB = new FirebaseDB(FirebaseConfig.FIREBASE_DATABASE_URL);
 
-
-            FirebaseDB firebaseDB = new FirebaseDB("https://primerrespondiente-2c016.firebaseio.com/");
-
-            // Referring to Node with name "Teams"  
-            FirebaseDB firebaseDBTeams = firebaseDB.Node("Registro_de_Emergencia");
-
+            var firebaseDBEmergencia = firebaseDB.Node(FirebaseConfig.EMERGENCIA_TABLE_NAME);
             var data = @"{ 'nueva_emergencia': 1 }";
 
+            var postResponse = firebaseDBEmergencia.Post(data);
+            if(postResponse.Success)
+            {
+                FirebasePushNotificationSenderManager.SendNotificationToChannelAsync("Nueva Emergencia");
+            }
+            Console.WriteLine(postResponse);
+        }
+    }
 
-            FirebaseResponse postResponse = firebaseDBTeams.Post(data);
-            Console.WriteLine(postResponse.Success);
+    static class FirebasePushNotificationSenderManager
+    {
+        public static async void SendNotificationToChannelAsync(string message)
+        {
+            try
+            {
+                var jGcmData = new JObject
+                {
+                    { "to", "/topics/"+FirebaseConfig.TOPIC_CHANNEL_NAME },
+                    { "data", new JObject { { "message", message } } }
+                };
 
+                using (var handler = new HttpClientHandler())
+                {
+                    using (var client = new HttpClient(handler, true))
+                    {
+                        using (var request = new HttpRequestMessage(HttpMethod.Post, FirebaseConfig.NOTIFICATIONS_URL))
+                        {
+                            request.Headers.Add("Accept", "application/json"); //Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Headers.TryAddWithoutValidation("Authorization", "key=" + FirebaseConfig.SERVER_KEY);
 
+                            request.Content = new StringContent(jGcmData.ToString(), Encoding.UTF8, "application/json");
+
+                            using (var response = await client.SendAsync(request))
+                            {
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    Console.WriteLine("Message sent: check client device notification tray");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Message sent response: StatusCode = " + response.StatusCode.ToString() + " message = " + response.ToString());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unable to send GCM message");
+                Console.Error.WriteLine(ex.StackTrace);
+            }
         }
     }
 
 
+    /// <summary>
+    /// Firebase db.
+    /// </summary>
     public class FirebaseDB
     {
         public FirebaseDB()

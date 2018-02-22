@@ -56,6 +56,7 @@
     <Compile Include="Firebase\FirebaseRequest.cs" />
     <Compile Include="Firebase\FirebaseResponse.cs" />
     <Compile Include="Firebase\UtilityHelper.cs" />
+    <Compile Include="Firebase\FirebaseConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Firebase\" />
